@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: runplan-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/runplan
+      SPRING_DATASOURCE_USERNAME: runplan
+      SPRING_DATASOURCE_PASSWORD: runplan
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 3000
+      SERVER_SERVLET_CONTEXT_PATH: /v1
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  db:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    container_name: runplan-postgres
+    environment:
+      POSTGRES_DB: runplan
+      POSTGRES_USER: runplan
+      POSTGRES_PASSWORD: runplan
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U runplan -d runplan"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
