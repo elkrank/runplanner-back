@@ -1,6 +1,16 @@
 spring:
   application:
     name: runplanner-back
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/runplan}
+    username: ${SPRING_DATASOURCE_USERNAME:runplan}
+    password: ${SPRING_DATASOURCE_PASSWORD:runplan}
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    properties:
+      hibernate:
+        default_schema: runplan
 
 server:
   port: 3000
