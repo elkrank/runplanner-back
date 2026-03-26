@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-FROM maven:3.9.10-eclipse-temurin-25 AS builder
+FROM maven:3.9.12-eclipse-temurin-25 AS builder
 WORKDIR /app
 
 COPY pom.xml ./
